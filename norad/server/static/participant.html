@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>participant</title>
+<style>
+  /* Constant mid-grey so screen brightness never moves the pupil. */
+  html, body { margin: 0; height: 100%; background: #808080; cursor: none; overflow: hidden; }
+  .cross { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; transform: translate(-50%, -50%); }
+  .cross::before, .cross::after { content: ""; position: absolute; background: #000; }
+  .cross::before { left: 18px; top: 0; width: 4px; height: 40px; }
+  .cross::after { top: 18px; left: 0; height: 4px; width: 40px; }
+</style>
+</head>
+<body ondblclick="document.documentElement.requestFullscreen()">
+<div class="cross"></div>
+<script>
+  // Keys pressed here (e.g. the clicker after this window took focus) go to the operator screen.
+  document.addEventListener('keydown', e => {
+    if (window.opener && window.opener.handleKey && window.opener.handleKey(e)) e.preventDefault();
+  });
+</script>
+</body>
+</html>

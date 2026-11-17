@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Norad</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>Norad</h1>
+  <span class="dev"><span class="dot" id="dot-tobii"></span>Tobii <span class="sub" id="rate-tobii"></span></span>
+  <span class="dev"><span class="dot" id="dot-nasal"></span>Nasal <span class="sub" id="rate-nasal"></span></span>
+  <span class="dev"><span class="dot" id="dot-polar"></span>Polar H10 <span class="sub" id="rate-polar"></span></span>
+  <span class="dev"><span class="dot" id="dot-lr"></span>LabRecorder</span>
+  <span class="sub warn" id="msg"></span>
+</header>
+<main>
+  <aside>
+    <div class="lbl">Devices</div>
+    <div class="row">
+      <button id="btn-connect">Connect devices</button>
+      <button id="btn-participant">Open participant screen</button>
+    </div>
+    <div class="sub" id="dev-errors"></div>
+
+    <div class="lbl">Tobii</div>
+    <div class="sub">Hold the calibration card ~1 m in front, look at its centre, then:</div>
+    <div class="row" style="margin-top:6px"><button id="btn-calibrate">Calibrate Tobii</button></div>
+    <div class="sub" id="calib-msg"></div>
+
+    <div class="lbl">Polar H10</div>
+    <div class="sub" id="polar-saved">Not set up yet. Wet the strap, put it on, then scan.</div>
+    <div class="row" style="margin-top:6px"><button id="btn-scan">Scan</button></div>
+    <div id="polar-list"></div>
+
+    <div class="lbl">Recording</div>
+    <div class="row"><input id="participant" placeholder="Participant (e.g. pilot-01)"></div>
+    <div class="row"><input id="task" placeholder="Task name"></div>
+    <div class="row">
+      <button class="go" id="btn-start">Start</button>
+      <button class="stop" id="btn-stop" hidden>Stop (Esc Esc)</button>
+      <span class="sub" id="rec-info"></span>
+    </div>
+    <div class="sub" id="rec-streams"></div>
+    <div class="row" style="margin-top:6px"><button id="btn-oddball">Oddball task (5 min)</button></div>
+    <div class="sub">Opens on the participant screen; records while it runs. Use wired headphones.</div>
+
+    <div class="lbl">Markers</div>
+    <div class="sub">Space / clicker = mark · 1–9 = labelled · Esc twice = stop</div>
+    <div id="labels"></div>
+    <div class="row" style="margin-top:6px"><input id="note" placeholder="Note, then Enter"></div>
+    <div id="log" class="sub"></div>
+  </aside>
+  <section>
+    <div class="row">
+      <div class="nums">
+        <div class="num"><span class="sub">Pupil L / R (mm)</span><b id="n-pupil">–</b></div>
+        <div class="num"><span class="sub">Fixation (ms)</span><b id="n-fix">–</b></div>
+        <div class="num"><span class="sub">Fixations / min</span><b id="n-fixrate">–</b></div>
+        <div class="num"><span class="sub">Heart rate</span><b id="n-hr">–</b></div>
+      </div>
+      <div style="flex:1"></div>
+      <span class="sub">Window</span>
+      <select id="win" style="width:auto"><option>10</option><option selected>30</option><option>60</option></select>
+      <span class="sub">s</span>
+    </div>
+    <div class="live">
+      <canvas id="timeline"></canvas>
+      <div>
+        <div class="sub">Gaze (filled dot = fixating) on scene camera</div>
+        <div class="scene"><img id="scene" alt=""><canvas id="gaze"></canvas></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="/static/vendor/socket.io.min.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

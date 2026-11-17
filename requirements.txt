@@ -1,0 +1,9 @@
+pylsl
+pyserial
+bleak
+bleakheart
+tobiiglassesctrl
+numpy
+opencv-python
+flask
+flask-socketio

@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.DS_Store
+.venv/
+Results/
+recordings/
+settings.json
+/*.csv
+logs/
+.pytest_cache/
+sub-*/

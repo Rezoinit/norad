@@ -1,0 +1,30 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0f1218; color: #e8eef5; font: 13px system-ui, -apple-system, sans-serif; }
+header { display: flex; align-items: center; gap: 18px; padding: 10px 16px; background: #0d1016; border-bottom: 1px solid #232b3a; }
+header h1 { font-size: 14px; letter-spacing: 1px; }
+.dev { display: flex; align-items: center; gap: 6px; color: #a8bdd0; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #3e4a5e; }
+.dot.ok { background: #3ecfb2; } .dot.err { background: #f5a742; }
+main { display: grid; grid-template-columns: 300px 1fr; gap: 1px; background: #1c2330; min-height: calc(100vh - 42px); }
+aside, section { background: #12151c; padding: 14px 16px; min-width: 0; }
+.lbl { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #7f95ab; margin: 14px 0 6px; }
+.lbl:first-child { margin-top: 0; }
+button { background: #1d2431; border: 1px solid #34405a; border-radius: 5px; padding: 6px 11px; color: #c9d6e3; cursor: pointer; font: inherit; }
+button:hover { border-color: #4a5a78; }
+button.go { background: #1f8f78; border-color: #2bb596; color: #fff; font-weight: 600; }
+button.stop { background: #a03c3c; border-color: #c95050; color: #fff; font-weight: 600; }
+input, select { background: #0f1218; border: 1px solid #2c3648; border-radius: 5px; padding: 6px 9px; color: #e8eef5; font: inherit; width: 100%; }
+.row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.sub { font-size: 11px; color: #7f95ab; }
+.warn { color: #f5a742; }
+#polar-list button { display: block; width: 100%; margin-top: 6px; text-align: left; }
+.nums { display: flex; gap: 22px; margin-bottom: 10px; }
+.num b { display: block; font-size: 22px; font-weight: 600; }
+#timeline { width: 100%; display: block; }
+.live { display: grid; grid-template-columns: 1fr 320px; gap: 12px; align-items: start; }
+.scene { position: relative; background: #0d1016; border: 1px solid #232b3a; aspect-ratio: 16 / 9; }
+.scene img { width: 100%; height: 100%; object-fit: contain; display: block; }
+#gaze { position: absolute; inset: 0; width: 100%; height: 100%; }
+#labels .row { margin-bottom: 4px; }
+#labels .key { width: 18px; color: #a8bdd0; }
+#log { margin-top: 8px; max-height: 160px; overflow-y: auto; line-height: 1.6; }
