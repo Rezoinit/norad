@@ -55,7 +55,7 @@ socket.on('status', s => {
   const r = s.recording;
   recording = r.active;
   $('btn-start').hidden = r.active;
-  $('btn-oddball').disabled = r.active || s.task_running;
+  document.querySelectorAll('button.task').forEach(b => { b.disabled = r.active || s.task_running; });
   $('btn-stop').hidden = !r.active;
   $('rec-info').textContent = r.active ? `● ${Math.floor(r.elapsed_s / 60)}:${String(r.elapsed_s % 60).padStart(2, '0')}  ${r.folder}` : '';
   $('rec-streams').textContent = r.active ? 'Recording: ' + r.streams.map(n => n.replace('norad_', '')).join(', ') : '';
@@ -101,11 +101,13 @@ $('btn-start').onclick = () => {
   socket.emit('start', { participant: $('participant').value, task: $('task').value });
 };
 $('btn-stop').onclick = () => socket.emit('stop', {});
-$('btn-oddball').onclick = () => {
-  localStorage.setItem('participant', $('participant').value);
-  $('log').innerHTML = '';
-  socket.emit('oddball', { participant: $('participant').value });
-};
+document.querySelectorAll('button.task').forEach(b => {
+  b.onclick = () => {
+    localStorage.setItem('participant', $('participant').value);
+    $('log').innerHTML = '';
+    socket.emit('task', { name: b.dataset.task, participant: $('participant').value });
+  };
+});
 
 // ── Markers ──
 const labels = JSON.parse(localStorage.getItem('labels') || '{}');

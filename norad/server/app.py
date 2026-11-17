@@ -19,7 +19,7 @@ from ..recorder import Recorder
 from ..sources.nasal import NasalSource
 from ..sources.polar import PolarSource, scan_polar
 from ..sources.tobii import SceneCamera, TobiiSource
-from ..tasks import ODDBALL, PSYCHOPY_APP, TaskRunner, psychopy_command
+from ..tasks import PSYCHOPY_APP, TASKS, TaskRunner, psychopy_command
 
 STATIC = Path(__file__).parent / "static"
 
@@ -117,17 +117,22 @@ def create_app(cfg: Config) -> tuple[Flask, SocketIO]:
         runner.cancel()  # a running task ends too
         end_recording()
 
-    @sio.on("oddball")
-    def oddball(msg):
+    @sio.on("task")
+    def task(msg):
+        t = TASKS.get(msg.get("name"))
+        if t is None:
+            sio.emit("app_error", f"Unknown task: {msg.get('name')}")
+            return
         if recorder.active or runner.running:
             sio.emit("app_error", "Stop the current recording first.")
             return
         if not PSYCHOPY_APP.exists():
             sio.emit("app_error", "PsychoPy is not installed (expected in /Applications).")
             return
-        task_who[:] = [msg.get("participant", ""), "oddball"]
-        runner.start(*psychopy_command(ODDBALL, "--wait-ready"))
-        sio.emit("app_error", "Oddball starting on the participant screen. Recording begins automatically.")
+        task_who[:] = [msg.get("participant", ""), t.label]
+        cmd, env = psychopy_command(t.script, *t.args, "--wait-ready")
+        runner.start(cmd, env, stream=t.stream)
+        sio.emit("app_error", f"{t.label} starting on the participant screen. Recording begins automatically.")
 
     @sio.on("polar_scan")
     def polar_scan(_=None):

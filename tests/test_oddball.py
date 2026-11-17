@@ -24,3 +24,16 @@ def test_intervals_jittered_in_range():
 def test_seed_repeats_and_differs():
     assert oddball.make_trials(20, 4, seed=3) == oddball.make_trials(20, 4, seed=3)
     assert oddball.make_trials(20, 4, seed=3) != oddball.make_trials(20, 4, seed=4)
+
+
+def test_graded_levels():
+    # only the high tone's pitch changes between levels; the low tone stays 1000 Hz
+    assert oddball.STANDARD_HZ == 1000
+    assert oddball.LEVELS == {"easy": 1500, "medium": 1100, "hard": 1030}
+
+
+def test_graded_block_order_is_random():
+    orders = {tuple(oddball.make_blocks(seed=s)) for s in range(30)}
+    assert all(sorted(o) == ["easy", "hard", "medium"] for o in orders)  # each level once
+    assert len(orders) > 1
+    assert oddball.make_blocks(seed=5) == oddball.make_blocks(seed=5)

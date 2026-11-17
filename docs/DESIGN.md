@@ -16,7 +16,8 @@ All devices publish to [LSL](https://labstreaminglayer.org). Each sample is stam
 | `norad_nasal` | XIAO nRF52840, 2 mics (USB) | ~840 Hz | mic1 (L), mic2 (R), temperature; raw ADC |
 | `norad_polar_ecg` / `_acc` / `_hr` | Polar H10 (Bluetooth) | 130 / 200 Hz / ~1 Hz | ECG µV; ACC x/y/z mg; HR bpm, RR ms |
 | `norad_markers` | keyboard, clicker, notes | event | label, text |
-| `oddball_markers` | PsychoPy oddball task | event | `standard`, `deviant`, `response`, … |
+| `oddball_markers` | PsychoPy oddball (default, graded) | event | `standard`, `deviant`, `response`; graded: `deviant:hard`, `block_start:easy`, … |
+| `digitspan_markers` | PsychoPy digit span (default, graded) | event | `digit:<d>:<pos>/<n>:<level>`, `hold`, `recall_start`, `answer:<typed>:<correct\|incorrect>:<level>`, … |
 
 - **Tobii:** every packet is read; one row per eye-tracking frame. Values the glasses mark invalid (blinks) are `nan`.
 - **LSL traffic stays inside the computer** (`norad/lsl_api.cfg`), so switching to the Tobii WiFi cannot break connections.
@@ -38,10 +39,14 @@ PsychoPy task ─────▶ LSL markers ───┤
 
 1. **Connect devices**; first time, scan and pick the Polar H10; **Calibrate Tobii** with the card.
 2. **Free session:** participant and task, **Start**. Space or clicker = mark, 1–9 = labelled marks, note + Enter. Esc twice stops.
-3. **Oddball task:** one button; recording starts and stops with the task.
+3. **Tasks:** one button each (default and graded); recording starts and stops with the task.
 4. **Screens:** operator screen (browser) and participant screen (mid-grey with fixation cross; PsychoPy uses it full screen).
 
-**Oddball:** 120 standard (1000 Hz) and 30 deviant (1500 Hz) tones, 100 ms, onset interval 1.5–2.5 s, no back-to-back deviants, SPACE for deviants, 10 s baseline. Tone markers carry the scheduled sound onset.
+**Oddball** (`tasks/oddball/oddball.py`): 120 standard (1000 Hz) and 30 deviant (1500 Hz) tones, 100 ms, onset interval 1.5–2.5 s, no back-to-back deviants, SPACE for deviants, 10 s baseline. **Graded** (`--graded`): three blocks in random order, 80 standard + 20 deviant each; only the deviant pitch changes: 1500 / 1100 / 1030 Hz (easy / medium / hard); 30 s rest between blocks. Tone markers carry the scheduled sound onset.
+
+**Digit span** (`tasks/digit_span/digit_span.py`): per trial 2 s fixation, digits spoken one per second (Mac voice, generated on first run), 2 s hold, typed recall + Enter (typed so speech does not disturb breathing), 4 s rest. Default: 16 trials of 3 digits. **Graded** (`--graded`): 3 / 5 / 7 digits, 8 trials each, mixed at random. Classic pupil-load design (Kahneman & Beatty, 1966).
+
+Shared task code (screen, markers on the LSL clock, keys): `tasks/taskkit.py`.
 
 ## Data
 

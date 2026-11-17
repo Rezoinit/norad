@@ -20,7 +20,14 @@ Records eye tracking, nasal breathing and heart signals in sync, with markers, t
 5. **Open participant screen** and move it to the second monitor (double-click it for full screen).
 6. Enter participant and task → **Start**. Markers: **Space** or clicker = mark, **1–9** = your labels, note + **Enter**. **Esc** twice stops.
 
-**Oddball task:** button **Oddball task (5 min)**. Low (1000 Hz) and high (1500 Hz) tones; press SPACE for high tones. Recording starts and stops with the task. Use **wired** headphones (Bluetooth adds ~150 ms of variable delay).
+**Tasks** (PsychoPy, on the participant screen). Each button starts a recording, runs the task and stops when it ends. Use **wired** headphones (Bluetooth adds ~150 ms of variable delay).
+
+| Button | What happens |
+|---|---|
+| Oddball (5 min) | Low (1000 Hz) and high (1500 Hz) tones; press SPACE for high tones. |
+| Oddball graded (12 min) | Three blocks in random order, high tone 1500 / 1100 / 1030 Hz (easy / medium / hard), 30 s rest between. |
+| Digit span (4 min) | Hear 3 digits (one per second), type them back, Enter. 16 trials. |
+| Digit span graded (8 min) | 3 / 5 / 7 digits (easy / medium / hard), 8 trials each, mixed at random. |
 
 ## Devices
 
@@ -41,7 +48,7 @@ YYYY-MM-DD_HHMM_<participant>_<task>/
   recording.xdf     all streams (LabRecorder)
   session.json      participant, task, streams, sample counts, software version
   raw/              tobii.csv  tobii_imu.csv  nasal.csv  polar_ecg.csv  polar_acc.csv  polar_hr.csv
-                    markers.csv  oddball_markers.csv
+                    markers.csv  oddball_markers.csv  digitspan_markers.csv
 ```
 
 - Every CSV starts with `t_lsl`: seconds on the shared clock. Device samples carry their measurement time; markers and Polar heart-rate reports their arrival time.

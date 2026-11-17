@@ -10,3 +10,4 @@ settings.json
 logs/
 .pytest_cache/
 sub-*/
+tasks/digit_span/voice/

@@ -61,3 +61,14 @@ def test_scene_frame_endpoint(monkeypatch):
     r = _test_app(monkeypatch, b"\xff\xd8jpeg").get("/scene.jpg")
     assert r.status_code == 200 and r.mimetype == "image/jpeg" and r.data == b"\xff\xd8jpeg"
     assert "no-store" in r.headers["Cache-Control"]
+
+
+def test_unknown_task_reports_error(monkeypatch):
+    for name in ("SceneCamera", "MarkerOutlet", "LiveHub"):
+        monkeypatch.setattr(app_mod, name, type(name, (), {"__init__": lambda self, *a, **k: None,
+                                                           "start": lambda self: None, "latest_jpeg": None}))
+    app, sio = app_mod.create_app(Config(port=0))
+    client = sio.test_client(app)
+    client.emit("task", {"name": "nope", "participant": "p"})
+    errors = [m["args"][0] for m in client.get_received() if m["name"] == "app_error"]
+    assert any("Unknown task" in e for e in errors)

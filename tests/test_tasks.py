@@ -68,3 +68,15 @@ def test_task_told_when_recording_runs(tmp_path):
         time.sleep(0.2)
     rows = list(csv.reader(open(started[0] / "raw" / "test_task_markers.csv")))
     assert [r[1] for r in rows[1:]] == ["task_start"]  # first marker not lost
+
+
+def test_task_list():
+    from norad.tasks import TASKS
+
+    assert list(TASKS) == ["oddball", "oddball_graded", "digit_span", "digit_span_graded"]
+    for key, t in TASKS.items():
+        assert t.script.exists()
+        assert ("--graded" in t.args) == key.endswith("_graded")
+    assert TASKS["oddball_graded"].stream == "oddball_markers"
+    assert TASKS["digit_span_graded"].stream == "digitspan_markers"
+    assert TASKS["digit_span"].label == "digit-span"  # recording folder name

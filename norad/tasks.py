@@ -2,6 +2,7 @@
 import os
 import subprocess
 import threading
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
@@ -11,6 +12,23 @@ from .config import REPO_ROOT
 
 PSYCHOPY_APP = Path("/Applications/PsychoPy.app")
 ODDBALL = REPO_ROOT / "tasks" / "oddball" / "oddball.py"
+DIGIT_SPAN = REPO_ROOT / "tasks" / "digit_span" / "digit_span.py"
+
+
+@dataclass(frozen=True)
+class Task:
+    label: str  # recording folder name
+    script: Path
+    args: tuple[str, ...]
+    stream: str  # the task's LSL marker stream
+
+
+TASKS = {
+    "oddball": Task("oddball", ODDBALL, (), "oddball_markers"),
+    "oddball_graded": Task("oddball-graded", ODDBALL, ("--graded",), "oddball_markers"),
+    "digit_span": Task("digit-span", DIGIT_SPAN, (), "digitspan_markers"),
+    "digit_span_graded": Task("digit-span-graded", DIGIT_SPAN, ("--graded",), "digitspan_markers"),
+}
 
 
 def psychopy_command(script, *args: str) -> tuple[list[str], dict]:
