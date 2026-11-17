@@ -13,7 +13,9 @@ def test_child_crash_reported_not_raised():
 
     from norad.sources.polar import PolarSource
 
-    src = PolarSource("AA", cmd=[sys.executable, "-c", "import os; os.abort()"])
+    # the child is killed by a signal, as macOS does without Bluetooth permission
+    # (SIGKILL rather than abort(), so macOS shows no crash-report dialog)
+    src = PolarSource("AA", cmd=[sys.executable, "-c", "import os, signal; os.kill(os.getpid(), signal.SIGKILL)"])
     src.start()
     time.sleep(1.0)
     st = src.status()
