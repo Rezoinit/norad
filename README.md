@@ -6,8 +6,11 @@ Records eye tracking, nasal breathing and heart signals in sync, with markers, t
 
 **Install (once, ~15 min)**
 1. Download, unzip, and move the `norad-main` folder to **Documents** (keep it there).
-2. Right-click **Install Norad** → **Open** → **Open**. Enter your Mac password if asked.
-3. When it says *Done*, close the window. **Start Norad** and **Norad Results** are now on your Desktop.
+2. Double-click **Install Norad**. macOS warns it can't verify it: click **Done** (not *Move to Bin*).
+3. Open **System Settings → Privacy & Security**, scroll down, click **Open Anyway** next to *"Install Norad.command" was blocked*, enter your Mac password, then **Open**.
+4. When it says *Done*, close the window. **Start Norad** and **Norad Results** are now on your Desktop.
+
+*Or, in Terminal:* `xattr -dr com.apple.quarantine ~/Documents/norad-main && open ~/Documents/norad-main/"Install Norad.command"`
 
 **Run**
 1. Wet the Polar H10 electrodes and put it on. Plug in the nasal sensor. Join the Tobii WiFi.
