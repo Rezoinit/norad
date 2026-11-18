@@ -57,5 +57,6 @@ YYYY-MM-DD_HHMM_<participant>_<task>/
 
 ## More
 
+- Next development stage: an assessment battery to build a physiological baseline profile before tasks.
 - Design and next steps: [docs/DESIGN.md](docs/DESIGN.md)
 - Tests: `.venv/bin/pip install -e ".[dev]"` then `.venv/bin/pytest`
