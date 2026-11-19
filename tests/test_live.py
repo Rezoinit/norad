@@ -13,6 +13,38 @@ def test_rms_envelope():
     assert np.median(env) == pytest.approx(np.sqrt(2), abs=0.05)
 
 
+def test_nasal_envelope_in_mv():
+    from norad.live import LiveHub, MV_PER_COUNT
+
+    fs = 800.0
+    t = np.arange(0, 1, 1 / fs)
+    x = 2825 + 100 * np.sin(2 * np.pi * 50 * t)  # counts: rest level plus a 100-count tone
+    env, _ = LiveHub(None)._nasal_envelope([[0, 0, v, v, 0] for v in x], list(t))
+    assert MV_PER_COUNT == pytest.approx(0.586, abs=0.001)
+    assert np.median(np.array(env)[:, 0]) == pytest.approx(100 / np.sqrt(2) * MV_PER_COUNT, rel=0.05)
+
+
+def test_rmssd_drops_bad_beats():
+    from norad.live import clean_beats, rmssd
+
+    rr = np.array([800, 820] * 30, dtype=float)  # successive differences all 20 ms
+    assert rmssd(rr) == pytest.approx(20.0)
+    rr[10] = 1600  # one missed beat
+    assert not clean_beats(rr)[10]
+    assert rmssd(rr) == pytest.approx(20.0)
+    assert np.isnan(rmssd(np.array([800, 800, 1600] * 20, dtype=float)))  # 1 in 3 bad: no value
+
+
+def test_hrv_waits_for_60_s():
+    from norad.live import LiveHub
+
+    hub = LiveHub(None)
+    rows, ts = hub._hrv([[70, 800 + 20 * (k % 2)] for k in range(50)], [0.8 * k for k in range(50)])
+    assert rows == []  # 40 s of beats: too short
+    rows, ts = hub._hrv([[70, 800 + 20 * (k % 2)] for k in range(50, 100)], [0.8 * k for k in range(50, 100)])
+    assert rows and rows[-1] == [20.0] and ts[-1] == pytest.approx(79.2)
+
+
 def test_emitted_payload_has_no_nan():
     import json
     import time
