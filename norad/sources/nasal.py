@@ -1,6 +1,7 @@
 """Nasal breathing sensor (XIAO nRF52840, two mics) over USB serial, at full rate.
 
 The board sends one JSON line per sample: {"t": board_ms, "seq", "m1", "m2", "temp"}.
+"temp" is the chip temperature in 0.25 °C units; it is stored as °C.
 Opening the port resets the board, which then waits ~3 s before sending.
 """
 import json
@@ -79,6 +80,6 @@ class NasalSource(Source):
                 self.clock.reset()
             last_seq = d["seq"]
             t = self.clock.map(d["t"] / 1000.0, pylsl.local_clock())
-            out.push_sample([d["t"], d["seq"], d["m1"], d["m2"], d.get("temp", float("nan"))], t)
+            out.push_sample([d["t"], d["seq"], d["m1"], d["m2"], d.get("temp", float("nan")) / 4.0], t)
             self.connected = True
             self._count(1)

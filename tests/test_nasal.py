@@ -11,11 +11,11 @@ from norad.sources.nasal import NasalSource, parse_line
 
 
 def _line(t, seq):
-    return json.dumps({"t": t, "seq": seq, "m1": 2000, "m2": 2100, "temp": 31.5})
+    return json.dumps({"t": t, "seq": seq, "m1": 2000, "m2": 2100, "temp": 115})
 
 
 def test_parse_line():
-    assert parse_line(_line(3005, 1)) == {"t": 3005, "seq": 1, "m1": 2000, "m2": 2100, "temp": 31.5}
+    assert parse_line(_line(3005, 1)) == {"t": 3005, "seq": 1, "m1": 2000, "m2": 2100, "temp": 115}
     assert parse_line('{"status":"ready","t":3001}') is None
     assert parse_line("garbage") is None
 
@@ -38,12 +38,14 @@ def test_reset_detected():
     inlet.open_stream(timeout=5)
     time.sleep(0.2)
     ready.set()
-    got = []
+    got, rows = [], []
     deadline = time.time() + 4
     while len(got) < 110 and time.time() < deadline:
-        _, ts = inlet.pull_chunk(timeout=0.5)
+        samples, ts = inlet.pull_chunk(timeout=0.5)
         got += ts
+        rows += samples
     assert len(got) == 110
+    assert rows[0][4] == 28.75  # raw 115 quarter-degrees -> °C
     assert min(b - a for a, b in zip(got, got[1:])) > -0.1
 
 
